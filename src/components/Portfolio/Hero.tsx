@@ -1,9 +1,13 @@
 import { useState, useEffect } from 'react';
 import { ChevronDown, Github, Linkedin, Mail, Phone } from 'lucide-react';
 import { Button } from '../ui/button';
+import { useParallax } from '@/hooks/useScrollAnimation';
 
 const Hero = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const { ref: parallaxRef1, offset: parallaxOffset1 } = useParallax(0.3);
+  const { ref: parallaxRef2, offset: parallaxOffset2 } = useParallax(0.5);
+  const { ref: parallaxRef3, offset: parallaxOffset3 } = useParallax(0.2);
 
   useEffect(() => {
     setIsVisible(true);
@@ -19,11 +23,23 @@ const Hero = () => {
       {/* Animated background grid */}
       <div className="absolute inset-0 tech-grid opacity-30" />
       
-      {/* Floating shapes */}
+      {/* Floating shapes with parallax */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-20 left-10 w-20 h-20 border border-primary/30 rounded-lg animate-float" />
-        <div className="absolute top-40 right-20 w-16 h-16 border border-accent/30 rounded-full animate-float-delayed" />
-        <div className="absolute bottom-32 left-20 w-12 h-12 bg-primary/20 rounded-lg animate-float-reverse" />
+        <div 
+          ref={parallaxRef1}
+          className="absolute top-20 left-10 w-20 h-20 border border-primary/30 rounded-lg animate-float"
+          style={{ transform: `translateY(${parallaxOffset1 * 0.5}px)` }}
+        />
+        <div 
+          ref={parallaxRef2}
+          className="absolute top-40 right-20 w-16 h-16 border border-accent/30 rounded-full animate-float-delayed"
+          style={{ transform: `translateY(${parallaxOffset2 * 0.3}px)` }}
+        />
+        <div 
+          ref={parallaxRef3}
+          className="absolute bottom-32 left-20 w-12 h-12 bg-primary/20 rounded-lg animate-float-reverse"
+          style={{ transform: `translateY(${parallaxOffset3 * 0.7}px)` }}
+        />
         <div className="absolute bottom-20 right-32 w-8 h-8 bg-accent/20 rounded-full animate-pulse-glow" />
       </div>
 

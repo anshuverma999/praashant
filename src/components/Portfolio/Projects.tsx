@@ -2,25 +2,14 @@ import { useState, useEffect } from 'react';
 import { ExternalLink, Github, TrendingUp, Users, Zap, DollarSign, Target, Clock } from 'lucide-react';
 import { Card } from '../ui/card';
 import { Button } from '../ui/button';
+import { useScrollReveal, useStaggeredAnimation, useParallax } from '@/hooks/useScrollAnimation';
 
 const Projects = () => {
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    const element = document.getElementById('projects');
-    if (element) observer.observe(element);
-
-    return () => observer.disconnect();
-  }, []);
+  const { ref: headerRef, className: headerClass } = useScrollReveal('fade');
+  const { ref: projectsRef, visibleItems: projectItems } = useStaggeredAnimation(4, 200);
+  const { ref: ctaRef, className: ctaClass } = useScrollReveal('scale');
+  const { ref: bgParallax1, offset: bgOffset1 } = useParallax(0.3);
+  const { ref: bgParallax2, offset: bgOffset2 } = useParallax(0.5);
 
   const projects = [
     {
@@ -111,14 +100,22 @@ const Projects = () => {
 
   return (
     <section id="projects" className="py-20 lg:py-32 relative overflow-hidden bg-muted/30">
-      {/* Background elements */}
+      {/* Background elements with parallax */}
       <div className="absolute inset-0 tech-grid opacity-20" />
-      <div className="absolute top-32 left-10 w-20 h-20 border border-primary/20 rounded-lg animate-float" />
-      <div className="absolute bottom-32 right-10 w-16 h-16 bg-accent/20 rounded-full animate-float-delayed" />
+      <div 
+        ref={bgParallax1}
+        className="absolute top-32 left-10 w-20 h-20 border border-primary/20 rounded-lg animate-float"
+        style={{ transform: `translateY(${bgOffset1}px)` }}
+      />
+      <div 
+        ref={bgParallax2}
+        className="absolute bottom-32 right-10 w-16 h-16 bg-accent/20 rounded-full animate-float-delayed"
+        style={{ transform: `translateY(${bgOffset2}px)` }}
+      />
 
       <div className="container mx-auto px-6 relative z-10">
         {/* Section Header */}
-        <div className={`text-center mb-16 ${isVisible ? 'animate-fadeInUp' : 'opacity-0'}`}>
+        <div ref={headerRef} className={`text-center mb-16 ${headerClass}`}>
           <h2 className="text-4xl lg:text-5xl font-bold mb-6">
             Featured <span className="text-gradient-primary">Projects</span>
           </h2>
@@ -129,12 +126,11 @@ const Projects = () => {
         </div>
 
         {/* Projects Grid */}
-        <div className="space-y-8">
+        <div ref={projectsRef} className="space-y-8">
           {projects.map((project, index) => (
             <Card 
               key={project.title} 
-              className={`card-tech ${isVisible ? `animate-fadeInUp` : 'opacity-0'}`}
-              style={{ animationDelay: `${index * 0.1}s` }}
+              className={`card-tech ${projectItems[index] ? 'scroll-reveal revealed stagger-' + ((index % 5) + 1) : 'scroll-reveal'}`}
             >
               <div className="flex flex-col lg:flex-row gap-6">
                 {/* Project Icon */}
@@ -204,7 +200,7 @@ const Projects = () => {
         </div>
 
         {/* Call to Action */}
-        <div className={`text-center mt-16 ${isVisible ? 'animate-fadeInUp animate-delay-500' : 'opacity-0'}`}>
+        <div ref={ctaRef} className={`text-center mt-16 ${ctaClass}`}>
           <Card className="card-tech inline-block">
             <div className="text-center space-y-4">
               <h3 className="text-2xl font-bold">Interested in My Work?</h3>
