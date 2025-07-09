@@ -1,15 +1,25 @@
 import { useState, useEffect } from 'react';
 import { TrendingUp, Users, Award, Target, Code, Database, Cloud, Zap } from 'lucide-react';
 import { Card } from '../ui/card';
-import { useScrollReveal, useStaggeredAnimation, useParallax } from '@/hooks/useScrollAnimation';
 
 const About = () => {
-  const { ref: headerRef, className: headerClass } = useScrollReveal('fade');
-  const { ref: achievementsRef, visibleItems: achievementItems } = useStaggeredAnimation(4, 150);
-  const { ref: skillsRef, className: skillsClass } = useScrollReveal('slide-left');
-  const { ref: summaryRef, className: summaryClass } = useScrollReveal('scale');
-  const { ref: bgParallax1, offset: bgOffset1 } = useParallax(0.2);
-  const { ref: bgParallax2, offset: bgOffset2 } = useParallax(0.4);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    const element = document.getElementById('about');
+    if (element) observer.observe(element);
+
+    return () => observer.disconnect();
+  }, []);
 
   const achievements = [
     {
@@ -63,22 +73,14 @@ const About = () => {
 
   return (
     <section id="about" className="py-20 lg:py-32 relative overflow-hidden">
-      {/* Background elements with parallax */}
+      {/* Background elements */}
       <div className="absolute inset-0 tech-grid opacity-20" />
-      <div 
-        ref={bgParallax1}
-        className="absolute top-20 right-10 w-32 h-32 border border-accent/20 rounded-lg animate-float-reverse"
-        style={{ transform: `translateY(${bgOffset1}px)` }}
-      />
-      <div 
-        ref={bgParallax2}
-        className="absolute bottom-20 left-10 w-24 h-24 bg-primary/10 rounded-full animate-float"
-        style={{ transform: `translateY(${bgOffset2}px)` }}
-      />
+      <div className="absolute top-20 right-10 w-32 h-32 border border-accent/20 rounded-lg animate-float-reverse" />
+      <div className="absolute bottom-20 left-10 w-24 h-24 bg-primary/10 rounded-full animate-float" />
 
       <div className="container mx-auto px-6 relative z-10">
         {/* Section Header */}
-        <div ref={headerRef} className={`text-center mb-16 ${headerClass}`}>
+        <div className={`text-center mb-16 ${isVisible ? 'animate-fadeInUp' : 'opacity-0'}`}>
           <h2 className="text-4xl lg:text-5xl font-bold mb-6">
             <span className="text-gradient-primary">About</span> Me
           </h2>
@@ -89,12 +91,9 @@ const About = () => {
         </div>
 
         {/* Achievements Grid */}
-        <div ref={achievementsRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
+        <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-20 ${isVisible ? 'animate-fadeInUp animate-delay-200' : 'opacity-0'}`}>
           {achievements.map((achievement, index) => (
-            <Card 
-              key={achievement.title} 
-              className={`card-tech text-center ${achievementItems[index] ? 'scroll-reveal revealed stagger-' + (index + 1) : 'scroll-reveal'}`}
-            >
+            <Card key={achievement.title} className="card-tech text-center">
               <div className="flex justify-center mb-4">
                 <div className="p-3 bg-primary/10 rounded-lg">
                   <achievement.icon className="w-8 h-8 text-primary" />
@@ -112,7 +111,7 @@ const About = () => {
         </div>
 
         {/* Skills Section */}
-        <div ref={skillsRef} className={`${skillsClass}`}>
+        <div className={`${isVisible ? 'animate-fadeInUp animate-delay-300' : 'opacity-0'}`}>
           <h3 className="text-3xl font-bold text-center mb-12">
             Technical <span className="text-gradient-primary">Expertise</span>
           </h3>
@@ -142,7 +141,7 @@ const About = () => {
         </div>
 
         {/* Professional Summary */}
-        <div ref={summaryRef} className={`mt-20 ${summaryClass}`}>
+        <div className={`mt-20 ${isVisible ? 'animate-fadeInUp animate-delay-500' : 'opacity-0'}`}>
           <Card className="card-tech">
             <div className="flex items-start gap-6">
               <div className="p-4 bg-gradient-primary rounded-lg flex-shrink-0">
