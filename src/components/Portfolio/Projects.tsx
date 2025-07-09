@@ -24,36 +24,22 @@ const Projects = () => {
 
   const projects = [
     {
-      title: "Mercans Global Platform",
+      title: "Mercans Global Platform & HRBlizz Payroll System",
       role: "Sr. Technical Project Manager",
       company: "Mercans, Estonia",
       period: "Jun 2024 – Present",
-      description: "Spearheaded 7 product launches resulting in 18% YoY revenue growth and enhanced market penetration across global markets.",
+      description: "Spearheaded 7 product launches including the HRBlizz Payroll System, resulting in 18% YoY revenue growth and $5M+ in new revenue streams through comprehensive payroll automation.",
       achievements: [
         "18% YoY revenue growth through strategic product launches",
+        "$5M in new revenue streams from HRBlizz Payroll System",
         "42% improvement in cross-team collaboration via ClickUp migration",
         "$2.3M in upsell opportunities through analytics frameworks",
+        "Automated payroll processing for global workforce",
         "Enterprise client satisfaction boost (Audi, Uber, Ford, Mastercard)"
       ],
-      technologies: ["ClickUp", "Azure DevOps", "Analytics", "Enterprise Solutions"],
+      technologies: ["ClickUp", "Azure DevOps", "Java", "Spring Boot", "REST APIs", "Kafka", "Analytics"],
       icon: TrendingUp,
       color: "primary"
-    },
-    {
-      title: "HRBlizz Payroll System",
-      role: "Product Development Lead",
-      company: "Mercans, Estonia", 
-      period: "2024",
-      description: "Led development of comprehensive payroll system generating $5M in new revenue streams with advanced automation features.",
-      achievements: [
-        "$5M in new revenue streams generated",
-        "Automated payroll processing for global workforce",
-        "Multi-currency and compliance support",
-        "Real-time analytics and reporting dashboard"
-      ],
-      technologies: ["Java", "Spring Boot", "REST APIs", "Kafka", "Cloud Infrastructure"],
-      icon: DollarSign,
-      color: "accent"
     },
     {
       title: "MyGold SaaS Platform",
